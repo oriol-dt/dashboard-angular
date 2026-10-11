@@ -1,0 +1,39 @@
+<main class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Panel de Incidencias</h1>
+    <p class="subtitle">Gestión y monitorización del sistema en tiempo real</p>
+  </header>
+
+  <section class="search-section">
+    <label for="incident-search" class="sr-only">Buscar incidencia por título</label>
+    <input
+      id="incident-search"
+      type="text"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)"
+      placeholder="🔍 Buscar incidencia..."
+      aria-label="Buscar incidencia por título"
+    />
+  </section>
+
+  <section class="incidents-grid" aria-live="polite">
+    @for (incident of filteredIncidents(); track incident.id) {
+      <article class="incident-card" [class]="'priority-' + incident.priority.toLowerCase()">
+        <header class="card-header">
+          <span class="badge priority-badge">{{ incident.priority }}</span>
+          <span class="badge status-badge" [class.resolved]="incident.status === 'RESOLVED'">
+            {{ incident.status }}
+          </span>
+        </header>
+        <h3 class="card-title">{{ incident.title }}</h3>
+        <footer class="card-footer">
+          <small>ID: #{{ incident.id }}</small>
+        </footer>
+      </article>
+    } @empty {
+      <div class="empty-state" role="status">
+        <p>No se han encontrado incidencias que coincidan con la búsqueda.</p>
+      </div>
+    }
+  </section>
+</main>
